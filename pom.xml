@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+		 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.asmyun</groupId>
+    <artifactId>message_center</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0</version>
+    <modules>
+        <module>message-core</module>
+        <module>message-server</module>
+        <module>message-test</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-parent</artifactId>
+                <version>4.1.77.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>2.7.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.77.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <pluginManagement>
+            <plugins>
+                <!--compiler在maven声明周期内置，所以后面不用声明也可使用-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.5.1</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+
+                <!--公共checkstyle标准配置，可以在子模块中覆盖，修改自定义选项-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <configuration>
+                        <configLocation>config/checkstyle/google-checks-6.18.xml</configLocation>
+                        <consoleOutput>true</consoleOutput>
+                        <encoding>UTF-8</encoding>
+                        <consoleOutput>true</consoleOutput>
+                        <failsOnError>true</failsOnError>
+                        <linkXRef>false</linkXRef>
+                        <skip>false</skip>
+                        <violationSeverity>error</violationSeverity>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>install</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>checkstyle</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+
+        <!--所有子模块都要执行的plugin-->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+        </plugins>
+
+    </build>
+
+    <reporting>
+        <!--所有子模块都要执行的报告-->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
+</project>
