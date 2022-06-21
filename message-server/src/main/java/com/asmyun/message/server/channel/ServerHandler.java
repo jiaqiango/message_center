@@ -35,6 +35,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.info( "有客户端连入" );
+        ctx.channel().write( "欢迎!");
     }
 
     @Override
