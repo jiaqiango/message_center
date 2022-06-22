@@ -22,33 +22,40 @@
  * SOFTWARE.
  */
 
-package com.asmyun.message.server.channel;
+package com.asmyun.message.server.codec;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import lombok.extern.slf4j.Slf4j;
+import lombok.Data;
 
-@Slf4j
-public class ServerHandler extends ChannelInboundHandlerAdapter {
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        log.info( "有客户端连入 uuid: {}", ctx.channel().id() );
-        ctx.channel().write( "欢迎!");
-        ctx.channel().flush();
+@Data
+public class Message {
+
+    private int magicNumber;
+    private byte mainVersion;
+    private byte subVersion;
+    private byte modifyVersion;
+    private String sessionId;
+
+    private MessageTypeEnum messageType;
+
+    private Map<String, String> attachments = new HashMap<>();
+    private String body;
+
+    public Map<String, String> getAttachments() {
+        return Collections.unmodifiableMap(attachments);
     }
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
-        // Discard the received data silently.
-        ((ByteBuf) msg).release(); // (3)
+    public void setAttachments(Map<String, String> attachments) {
+        this.attachments.clear();
+        if (null != attachments) {
+            this.attachments.putAll(attachments);
+        }
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) { // (4)
-        // Close the connection when an exception is raised.
-        cause.printStackTrace();
-        ctx.close();
+    public void addAttachment(String key, String value) {
+        attachments.put(key, value);
     }
 }

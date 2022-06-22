@@ -22,33 +22,17 @@
  * SOFTWARE.
  */
 
-package com.asmyun.message.server.channel;
+package com.asmyun.message.server.codec;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import lombok.extern.slf4j.Slf4j;
+public class Constants {
 
-@Slf4j
-public class ServerHandler extends ChannelInboundHandlerAdapter {
+    public static int SESSION_ID_LENGTH = 12;
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        log.info( "有客户端连入 uuid: {}", ctx.channel().id() );
-        ctx.channel().write( "欢迎!");
-        ctx.channel().flush();
-    }
+    public static int MAGIC_NUMBER = 1;
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
-        // Discard the received data silently.
-        ((ByteBuf) msg).release(); // (3)
-    }
+    public static int MAIN_VERSION = 1;
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) { // (4)
-        // Close the connection when an exception is raised.
-        cause.printStackTrace();
-        ctx.close();
-    }
+    public static int SUB_VERSION = 1;
+
+    public static int MODIFY_VERSION = 1;
 }

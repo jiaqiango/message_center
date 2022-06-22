@@ -25,6 +25,7 @@
 package com.asmyun.message.server.run;
 
 import com.asmyun.message.server.channel.ServerHandler;
+import com.asmyun.message.server.codec.MessageDecoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -67,6 +68,7 @@ public class ServerRunner implements CommandLineRunner, ApplicationContextAware 
                     .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
+                            ch.pipeline().addLast(new MessageDecoder());
                             ch.pipeline().addLast(new ServerHandler());
                         }
                     })

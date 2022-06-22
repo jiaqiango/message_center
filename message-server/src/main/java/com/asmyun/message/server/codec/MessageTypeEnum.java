@@ -22,33 +22,28 @@
  * SOFTWARE.
  */
 
-package com.asmyun.message.server.channel;
+package com.asmyun.message.server.codec;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import lombok.extern.slf4j.Slf4j;
+public enum MessageTypeEnum {
+    REQUEST((byte) 1), RESPONSE((byte) 2), PING((byte) 3), PONG((byte) 4), EMPTY((byte) 5);
 
-@Slf4j
-public class ServerHandler extends ChannelInboundHandlerAdapter {
+    private final byte type;
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        log.info( "有客户端连入 uuid: {}", ctx.channel().id() );
-        ctx.channel().write( "欢迎!");
-        ctx.channel().flush();
+    MessageTypeEnum(byte type) {
+        this.type = type;
     }
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
-        // Discard the received data silently.
-        ((ByteBuf) msg).release(); // (3)
+    public int getType() {
+        return type;
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) { // (4)
-        // Close the connection when an exception is raised.
-        cause.printStackTrace();
-        ctx.close();
+    public static MessageTypeEnum get(byte type) {
+        for (MessageTypeEnum value : values()) {
+            if (value.type == type) {
+                return value;
+            }
+        }
+
+        throw new RuntimeException("unsupported type: " + type);
     }
 }
