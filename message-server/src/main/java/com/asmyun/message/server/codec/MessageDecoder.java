@@ -29,6 +29,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class MessageDecoder extends ByteToMessageDecoder {
@@ -41,7 +42,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
         message.setSubVersion(in.readByte()); // 读取次版本号
         message.setModifyVersion(in.readByte()); // 读取修订版本号
         CharSequence sessionId = in.readCharSequence(
-                Constants.SESSION_ID_LENGTH, Charset.defaultCharset()); // 读取sessionId
+                Constants.SESSION_ID_LENGTH, StandardCharsets.UTF_8); // 读取sessionId
         message.setSessionId((String) sessionId);
 
         message.setMessageType(MessageTypeEnum.get(in.readByte())); // 读取当前的消息类型

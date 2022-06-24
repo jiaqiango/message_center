@@ -24,25 +24,23 @@
 
 package com.asmyun.message.server.channel;
 
-import io.netty.buffer.ByteBuf;
+import com.asmyun.message.server.codec.Message;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ServerHandler extends ChannelInboundHandlerAdapter {
+public class ServerHandler extends SimpleChannelInboundHandler<Message> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.info( "有客户端连入 uuid: {}", ctx.channel().id() );
-        ctx.channel().write( "欢迎!");
-        ctx.channel().flush();
+        ctx.writeAndFlush(new Message("啊实打实的!"));
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
-        // Discard the received data silently.
-        ((ByteBuf) msg).release(); // (3)
+    protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
+        log.info( "get message: {}", msg.getBody() );
     }
 
     @Override

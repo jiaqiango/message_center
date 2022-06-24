@@ -24,10 +24,15 @@
 
 package com.asmyun.message.server.configure;
 
+import com.asmyun.message.server.run.ServerRunner;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.context.annotation.Bean;
 
 @Configurable
 public class ServerConfigure {
 
-    
+    @Bean
+    public ServerRunner serverRunner(){
+        return new ServerRunner();
+    }
 }

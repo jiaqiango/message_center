@@ -26,6 +26,7 @@ package com.asmyun.message.server.run;
 
 import com.asmyun.message.server.channel.ServerHandler;
 import com.asmyun.message.server.codec.MessageDecoder;
+import com.asmyun.message.server.codec.MessageEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -39,12 +40,10 @@ import org.springframework.beans.BeansException;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Slf4j
-@Component
 public class ServerRunner implements CommandLineRunner, ApplicationContextAware {
 
     private ApplicationContext context;
@@ -69,6 +68,7 @@ public class ServerRunner implements CommandLineRunner, ApplicationContextAware 
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(new MessageDecoder());
+                            ch.pipeline().addLast(new MessageEncoder());
                             ch.pipeline().addLast(new ServerHandler());
                         }
                     })

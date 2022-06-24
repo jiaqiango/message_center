@@ -24,21 +24,22 @@
 
 package com.asmyun.message.test;
 
-import io.netty.buffer.ByteBuf;
+import com.asmyun.message.server.codec.Message;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
 
-public class ClientHandler extends ChannelInboundHandlerAdapter {
+@Slf4j
+public class ClientHandler extends SimpleChannelInboundHandler<Message> {
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        ByteBuf m = (ByteBuf) msg; // (1)
-        try {
-            System.out.println(m.readChar());
-            ctx.close();
-        } finally {
-            m.release();
-        }
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+
+    }
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
+        log.info("get message : {}", msg.getBody());
     }
 
     @Override

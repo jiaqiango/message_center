@@ -30,6 +30,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 import org.springframework.util.StringUtils;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class MessageEncoder extends MessageToByteEncoder<Message> {
 
@@ -45,7 +46,7 @@ public class MessageEncoder extends MessageToByteEncoder<Message> {
                 // 生成一个sessionId，并将其写入到字节序列中
 //                String sessionId = SessionIdGenerator.generate();
 //                msg.setSessionId(sessionId);
-                out.writeCharSequence(null, Charset.defaultCharset());
+                out.writeCharSequence("123456789012", StandardCharsets.UTF_8);
             }
 
             out.writeByte(msg.getMessageType().getType()); // 写入当前消息的类型
@@ -61,9 +62,17 @@ public class MessageEncoder extends MessageToByteEncoder<Message> {
             if (null == msg.getBody()) {
                 out.writeInt(0); // 如果消息体为空，则写入0，表示消息体长度为0
             } else {
-                out.writeInt(msg.getBody().length());
+                out.writeInt(msg.getBody().getBytes(Charset.defaultCharset()).length);
+
+//                ByteBufUtil.encodeString(ctx.alloc(), CharBuffer.wrap(msg), charset)
                 out.writeCharSequence(msg.getBody(), Charset.defaultCharset());
             }
         }
+    }
+
+
+    public static void main(String[] args) {
+        String text = "123AA啊啊";
+        System.out.println( text.getBytes(Charset.defaultCharset()).length);
     }
 }

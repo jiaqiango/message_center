@@ -25,6 +25,8 @@
 package com.asmyun.message.test;
 
 
+import com.asmyun.message.server.codec.MessageDecoder;
+import com.asmyun.message.server.codec.MessageEncoder;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -49,6 +51,8 @@ public class ClientTest {
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
+                    ch.pipeline().addLast(new MessageDecoder());
+                    ch.pipeline().addLast(new MessageEncoder());
                     ch.pipeline().addLast(new ClientHandler());
                 }
             });

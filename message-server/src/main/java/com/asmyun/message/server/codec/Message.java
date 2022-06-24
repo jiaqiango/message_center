@@ -44,6 +44,14 @@ public class Message {
     private Map<String, String> attachments = new HashMap<>();
     private String body;
 
+    public Message() {
+    }
+
+    public Message(String body) {
+        this.body = body;
+        this.messageType= MessageTypeEnum.RESPONSE;
+    }
+
     public Map<String, String> getAttachments() {
         return Collections.unmodifiableMap(attachments);
     }
@@ -58,4 +66,6 @@ public class Message {
     public void addAttachment(String key, String value) {
         attachments.put(key, value);
     }
+
+
 }
